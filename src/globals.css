@@ -1,0 +1,41 @@
+@font-face {
+  font-family: 'PT Sans';
+  src: url(/fonts/PTSans-Bold.ttf) format('truetype');
+  src: url(/fonts/PTSans-Regular.ttf) format('truetype');
+}
+
+:root {
+  --background-colour: #434343;
+  --ak-black: #323232;
+  --ak-grey: #c0c0c0;
+  --ak-white: #fefefe;
+
+  --button-white: #f2f1ef;
+  --button-grey: #d9d9d9;
+  --button-blue: #06a8df;
+  --button-light-blue: #49c0e5;
+
+  --button-height: 6.5rem;
+  --primary-button-width: 17rem;
+  --secondary-button-width: var(--button-height);
+
+
+  font-family: 'PT Sans';
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+
+  color: var(--ak-white);
+  background-color: var(--background-colour);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+.button-text {
+  font-size: 3rem;
+  font-weight: 700;
+}
