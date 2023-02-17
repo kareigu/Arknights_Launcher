@@ -2,15 +2,22 @@
   import { invoke } from "@tauri-apps/api/tauri";
   import { View, CurrentView } from "../common";
 
+  let has_activity = false;
+  let launch_button_text = "Launch";
+
   async function launch() {
-    const res = await invoke("launch", {});
-    console.log(res);
+    launch_button_text = has_activity ? "Stopping" : "Launching";
+    try {
+      await invoke(has_activity ? "stop" : "launch", {});
+      has_activity = !has_activity;
+    } catch (e) {}
+    launch_button_text = has_activity ? "Stop" : "Launch";
   }
 </script>
 
 <main class="main-buttons">
   <button class="launch-button button-text" on:click={launch}>
-    <span class="launch-button-text"> Launch </span>
+    <span class="launch-button-text">{launch_button_text}</span>
   </button>
   <button
     class="options-button button-text"

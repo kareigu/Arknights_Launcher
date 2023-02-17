@@ -5,14 +5,16 @@
 
 use std::{sync::Arc, time::SystemTime};
 
-use discord_sdk::Discord;
+use discord_sdk::{activity::Activity, Discord};
 use runas::Command;
+use std::error::Error;
+use tauri::async_runtime::Mutex;
 
 static APP_ID: i64 = 1062430347557613610;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
-async fn launch(client: tauri::State<'_, Arc<Client>>) -> Result<(), ()> {
+async fn launch(client: tauri::State<'_, Arc<Mutex<Client>>>) -> Result<(), String> {
   println!("Launching Arknights");
   if !cfg!(target_os = "windows") {
     unimplemented!()
@@ -28,10 +30,25 @@ async fn launch(client: tauri::State<'_, Arc<Client>>) -> Result<(), ()> {
     .assets(discord_sdk::activity::Assets::default().large("amiya", Some("Arknights".to_owned())))
     .start_timestamp(SystemTime::now());
 
-  match client.discord.update_activity(activity).await {
-    Ok(o) => println!("Activity updated {:?}", o),
-    Err(e) => println!("Error updating activity: {}", e),
-  };
+  let mut client_lock = client.lock().await;
+  let activity = client_lock
+    .discord
+    .update_activity(activity)
+    .await
+    .map_err(|e| e.to_string())?;
+  println!("Updated activity: {:?}", activity);
+  client_lock.activity_set = true;
+  Ok(())
+}
+
+#[tauri::command]
+async fn stop(client: tauri::State<'_, Arc<Mutex<Client>>>) -> Result<(), String> {
+  client
+    .lock()
+    .await
+    .clear_activity()
+    .await
+    .map_err(|e| e.to_string())?;
   Ok(())
 }
 
@@ -42,14 +59,33 @@ fn options() -> String {
   tmp
 }
 
+#[tauri::command]
+async fn has_activity(client: tauri::State<'_, Arc<Mutex<Client>>>) -> Result<bool, ()> {
+  Ok(client.lock().await.activity_set)
+}
+
+#[tauri::command]
+fn log(invoke_message: String) {
+  println!("{}", invoke_message);
+}
+
 struct Client {
   pub discord: discord_sdk::Discord,
   pub user: discord_sdk::user::User,
   pub wheel: discord_sdk::wheel::Wheel,
+  pub activity_set: bool,
+}
+
+impl Client {
+  pub async fn clear_activity(&mut self) -> Result<Option<Activity>, discord_sdk::Error> {
+    let activity = self.discord.clear_activity().await?;
+    self.activity_set = false;
+    Ok(activity)
+  }
 }
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Box<dyn Error>> {
   let (wheel, handler) = discord_sdk::wheel::Wheel::new(Box::new(|e| {
     println!("{}", e);
   }));
@@ -60,8 +96,7 @@ async fn main() {
     discord_sdk::DiscordApp::PlainId(APP_ID),
     discord_sdk::Subscriptions::ACTIVITY,
     Box::new(handler),
-  )
-  .expect("Couldn't create Discord client");
+  )?;
 
   user.0.changed().await.unwrap();
 
@@ -72,21 +107,29 @@ async fn main() {
     }
   };
 
-  let discord_client = Arc::new(Client {
+  let discord_client = Arc::new(Mutex::new(Client {
     discord,
     user,
     wheel,
-  });
+    activity_set: false,
+  }));
 
   tauri::Builder::default()
     .manage(discord_client.clone())
-    .invoke_handler(tauri::generate_handler![launch, options])
-    .run(tauri::generate_context!())
-    .expect("error while running tauri application");
+    .invoke_handler(tauri::generate_handler![
+      launch,
+      stop,
+      options,
+      has_activity,
+      log
+    ])
+    .run(tauri::generate_context!())?;
 
-  discord_client
-    .discord
+  let mut discord_client_lock = discord_client.lock().await;
+  discord_client_lock
     .clear_activity()
     .await
     .expect("Failed clearing activity");
+
+  Ok(())
 }
