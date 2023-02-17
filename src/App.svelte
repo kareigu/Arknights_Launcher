@@ -1,6 +1,6 @@
 <script lang="ts">
-  import MainView from "./components/MainView.svelte";
-  import OptionsView from "./components/OptionsView.svelte";
+  import MainView from "./views/MainView.svelte";
+  import OptionsView from "./views/OptionsView.svelte";
   import { View, CurrentView } from "./common";
 
   let view: View;
