@@ -16,12 +16,15 @@
       "shell": {
         "all": false,
         "open": true
+      },
+      "dialog": {
+        "open": true
       }
     },
     "bundle": {
       "active": true,
-      "category": "DeveloperTool",
-      "copyright": "",
+      "category": "Games",
+      "copyright": "karei 2023",
       "deb": {
         "depends": []
       },
