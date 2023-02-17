@@ -2,8 +2,8 @@
 name = "arknights_launcher"
 version = "0.1.0"
 description = "Launcher for Arknights with Discord Rich Presence Support"
-authors = ["@kareigu"]
-license = "BSD 2-Clause"
+authors = ["Eetu Kivelä <mail@karei.dev>"]
+license = "BSD-2-Clause"
 repository = ""
 edition = "2021"
 
