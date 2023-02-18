@@ -7,6 +7,7 @@ use std::{sync::Arc, time::SystemTime};
 
 use discord_sdk::{activity::Activity, Discord};
 use runas::Command;
+use serde::{Deserialize, Serialize};
 use std::error::Error;
 use tauri::async_runtime::Mutex;
 
@@ -14,12 +15,18 @@ static APP_ID: i64 = 1062430347557613610;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
-async fn launch(client: tauri::State<'_, Arc<Mutex<Client>>>) -> Result<(), String> {
+async fn launch(
+  client: tauri::State<'_, Arc<Mutex<Client>>>,
+  options: tauri::State<'_, Arc<Mutex<Options>>>,
+) -> Result<(), String> {
   println!("Launching Arknights");
   if !cfg!(target_os = "windows") {
     unimplemented!()
   }
-  let mut command = Command::new("L:/Games/Arknights/Arknights.exe.lnk");
+
+  let executable_path = options.lock().await.executable_path.clone();
+
+  let mut command = Command::new(executable_path);
   let output = command.status();
 
   println!("{:?}", output);
@@ -53,10 +60,20 @@ async fn stop(client: tauri::State<'_, Arc<Mutex<Client>>>) -> Result<(), String
 }
 
 #[tauri::command]
-fn options() -> String {
-  let tmp = "Opening options".to_string();
-  println!("{}", tmp);
-  tmp
+async fn options(options: tauri::State<'_, Arc<Mutex<Options>>>) -> Result<Options, ()> {
+  Ok(options.lock().await.clone())
+}
+
+#[tauri::command]
+async fn set_options(
+  options: tauri::State<'_, Arc<Mutex<Options>>>,
+  new_options: Options,
+) -> Result<(), ()> {
+  let mut options_lock = options.lock().await;
+  println!("new_options: {:?}", new_options);
+  *options_lock = new_options;
+
+  Ok(())
 }
 
 #[tauri::command]
@@ -65,8 +82,8 @@ async fn has_activity(client: tauri::State<'_, Arc<Mutex<Client>>>) -> Result<bo
 }
 
 #[tauri::command]
-fn log(invoke_message: String) {
-  println!("{}", invoke_message);
+fn log(msg: String) {
+  println!("{}", msg);
 }
 
 struct Client {
@@ -82,6 +99,18 @@ impl Client {
     self.activity_set = false;
     Ok(activity)
   }
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+enum Background {
+  Default(String),
+  Custom(String),
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+struct Options {
+  pub executable_path: String,
+  pub background: Background,
 }
 
 #[tokio::main]
@@ -114,12 +143,19 @@ async fn main() -> Result<(), Box<dyn Error>> {
     activity_set: false,
   }));
 
+  let config = Arc::new(Mutex::new(Options {
+    executable_path: "L:/Games/Arknights/Arknights.exe.lnk".to_string(),
+    background: Background::Custom("Default".to_string()),
+  }));
+
   tauri::Builder::default()
     .manage(discord_client.clone())
+    .manage(config)
     .invoke_handler(tauri::generate_handler![
       launch,
       stop,
       options,
+      set_options,
       has_activity,
       log
     ])

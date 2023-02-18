@@ -1,11 +1,16 @@
 <script lang="ts">
   import { open } from "@tauri-apps/api/dialog";
+  import { invoke } from "@tauri-apps/api/tauri";
+  import { onMount } from "svelte";
   import { View, CurrentView } from "../common";
+  import type { Options } from "../common";
 
-  let debug = "";
+  let options: Options = { executable_path: "", background: {} };
+  let executablePath = "";
 
   async function executablePathBrowse() {
     const path = await open({
+      defaultPath: executablePath,
       multiple: false,
       filters: [
         {
@@ -15,8 +20,19 @@
       ],
     });
 
-    debug = path;
+    executablePath = path;
   }
+
+  async function save() {
+    options.executable_path = executablePath;
+    await invoke("set_options", { newOptions: options });
+  }
+
+  onMount(async () => {
+    options = await invoke("options", {});
+    await invoke("log", { msg: JSON.stringify(options) });
+    executablePath = options.executable_path;
+  });
 </script>
 
 <main class="options-view">
@@ -33,7 +49,7 @@
         type="text"
         placeholder="File path to the executable"
         class="text-input path-input"
-        value={debug}
+        value={executablePath}
       />
       <button class="option-button" on:click={executablePathBrowse}
         >Browse</button
@@ -43,7 +59,7 @@
     <h2>Background</h2>
 
     <div class="save-buttons">
-      <button class="option-button">Save</button>
+      <button class="option-button" on:click={save}>Save</button>
       <button class="option-button" disabled>Undo</button>
     </div>
   </div>
