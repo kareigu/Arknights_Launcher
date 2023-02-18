@@ -5,6 +5,8 @@
   let has_activity = false;
   let launch_button_text = "Launch";
 
+  let skew_to_hover = false;
+
   async function launch() {
     launch_button_text = has_activity ? "Stopping" : "Launching";
     try {
@@ -13,9 +15,26 @@
     } catch (e) {}
     launch_button_text = has_activity ? "Stop" : "Launch";
   }
+
+  function mouseMove(e: MouseEvent) {
+    document.documentElement.style.setProperty(
+      "--mouse-x",
+      `${e.clientX / 340}deg`
+    );
+    document.documentElement.style.setProperty(
+      "--mouse-y",
+      `${e.clientY / 160}deg`
+    );
+  }
 </script>
 
-<main class="main-buttons">
+<main
+  class="main-buttons"
+  class:skew_to_hover
+  on:mousemove={mouseMove}
+  on:mouseenter={() => (skew_to_hover = true)}
+  on:mouseleave={() => (skew_to_hover = false)}
+>
   <button class="launch-button button-text" on:click={launch}>
     <span class="launch-button-text">{launch_button_text}</span>
   </button>
@@ -30,7 +49,14 @@
 <style>
   .main-buttons {
     display: flex;
+    padding: 0.5rem;
     gap: 0.2rem;
+    transform: skew(1deg, 2deg);
+    transition: transform 200ms ease-out;
+  }
+
+  .skew_to_hover {
+    transform: skew(var(--mouse-x), var(--mouse-y));
   }
 
   .launch-button {

@@ -7,7 +7,7 @@
   CurrentView.subscribe((v: View) => (view = v));
 </script>
 
-<main class="main">
+<main class="main" on:mousemove={mouseMove}>
   <div>
     <img src="/images/Arknights_logo.webp" alt="Arknights logo" />
   </div>
