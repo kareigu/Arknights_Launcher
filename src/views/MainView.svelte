@@ -15,23 +15,11 @@
     } catch (e) {}
     launch_button_text = has_activity ? "Stop" : "Launch";
   }
-
-  function mouseMove(e: MouseEvent) {
-    document.documentElement.style.setProperty(
-      "--mouse-x",
-      `${e.clientX / 340}deg`
-    );
-    document.documentElement.style.setProperty(
-      "--mouse-y",
-      `${e.clientY / 160}deg`
-    );
-  }
 </script>
 
 <main
   class="main-buttons"
   class:skew_to_hover
-  on:mousemove={mouseMove}
   on:mouseenter={() => (skew_to_hover = true)}
   on:mouseleave={() => (skew_to_hover = false)}
 >
