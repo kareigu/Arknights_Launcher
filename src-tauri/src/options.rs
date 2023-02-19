@@ -45,8 +45,10 @@ impl Options {
   where
     S: ToString,
   {
-    let contents = ron::ser::to_string_pretty(self, PrettyConfig::default())
-      .map_err(|e| SaveError::Serialize(e))?;
+    let pretty_config = PrettyConfig::new().struct_names(true);
+
+    let contents =
+      ron::ser::to_string_pretty(self, pretty_config).map_err(|e| SaveError::Serialize(e))?;
 
     std::fs::write(path.to_string(), contents).map_err(|e| SaveError::WriteFile(e))
   }
