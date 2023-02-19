@@ -78,6 +78,13 @@ pub async fn has_activity(
 }
 
 #[tauri::command]
+pub async fn user(
+  client: tauri::State<'_, Arc<Mutex<discord::Client>>>,
+) -> Result<discord::UserData, ()> {
+  Ok(client.lock().await.user_data())
+}
+
+#[tauri::command]
 pub fn log(msg: String) {
   println!("{}", msg);
 }

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/tauri";
   import { View, CurrentView } from "../common";
+  import { onMount } from "svelte";
 
   let has_activity = false;
   let launch_button_text = "Launch";
@@ -15,6 +16,11 @@
     } catch (e) {}
     launch_button_text = has_activity ? "Stop" : "Launch";
   }
+
+  onMount(async () => {
+    const user = await invoke("user", {});
+    await invoke("log", { msg: JSON.stringify(user) });
+  });
 </script>
 
 <main

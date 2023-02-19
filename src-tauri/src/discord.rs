@@ -1,6 +1,7 @@
 use std::{error::Error, fmt::Display};
 
 use discord_sdk::{activity::Activity, Discord};
+use serde::Serialize;
 
 pub struct Client {
   pub discord: discord_sdk::Discord,
@@ -50,6 +51,22 @@ impl Client {
     self.activity_set = false;
     Ok(activity)
   }
+
+  pub fn user_data(&self) -> UserData {
+    let user = &self.user;
+    UserData {
+      id: user.id.0,
+      discriminator: user.discriminator.unwrap_or_else(|| 0000),
+      name: user.username.clone(),
+    }
+  }
+}
+
+#[derive(Serialize, Debug, Clone)]
+pub struct UserData {
+  id: u64,
+  discriminator: u32,
+  name: String,
 }
 
 #[derive(Debug)]

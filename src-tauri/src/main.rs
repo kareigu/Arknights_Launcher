@@ -41,7 +41,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
       commands::options,
       commands::set_options,
       commands::has_activity,
-      commands::log
+      commands::user,
+      commands::log,
     ])
     .run(tauri::generate_context!())?;
 
