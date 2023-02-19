@@ -7,23 +7,40 @@
   CurrentView.subscribe((v: View) => (view = v));
 </script>
 
-<main class="main" on:mousemove={mouseMove}>
-  <div>
-    <img src="/images/Arknights_logo.webp" alt="Arknights logo" />
-  </div>
+<main class="main">
+  <div class="character-bg">
+    <div>
+      <img src="/images/Arknights_logo.webp" alt="Arknights logo" />
+    </div>
 
-  {#if view == View.Options}
-    <OptionsView />
-  {:else}
-    <MainView />
-  {/if}
+    {#if view == View.Options}
+      <OptionsView />
+    {:else}
+      <MainView />
+    {/if}
+  </div>
 </main>
 
 <style>
   .main {
-    background-color: var(--background-colour);
+    background: var(--background-image);
+    background-repeat: no-repeat;
+    background-size: cover;
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .character-bg {
+    background: var(--background-character);
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
   }
 </style>
