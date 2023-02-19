@@ -2,6 +2,7 @@ use std::{error::Error, fmt::Display};
 
 use discord_sdk::{activity::Activity, Discord};
 use serde::Serialize;
+use tracing::error;
 
 pub struct Client {
   pub discord: discord_sdk::Discord,
@@ -13,7 +14,7 @@ pub struct Client {
 impl Client {
   pub async fn new(application_id: i64) -> Result<Self, ClientError> {
     let (wheel, handler) = discord_sdk::wheel::Wheel::new(Box::new(|e| {
-      println!("{}", e);
+      error!("{}", e);
     }));
 
     let mut user = wheel.user();

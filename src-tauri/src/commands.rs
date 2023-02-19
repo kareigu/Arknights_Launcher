@@ -4,13 +4,14 @@ use crate::OPTIONS_PATH;
 use runas::Command;
 use std::{sync::Arc, time::SystemTime};
 use tauri::async_runtime::Mutex;
+use tracing::{error, info};
 
 #[tauri::command]
 pub async fn launch(
   client: tauri::State<'_, Arc<Mutex<discord::Client>>>,
   options: tauri::State<'_, Arc<Mutex<Options>>>,
 ) -> Result<(), String> {
-  println!("Launching Arknights");
+  info!("Launching Arknights");
   if !cfg!(target_os = "windows") {
     unimplemented!()
   }
@@ -20,7 +21,7 @@ pub async fn launch(
   let mut command = Command::new(executable_path);
   let output = command.status();
 
-  println!("{:?}", output);
+  info!("Run output: {:?}", output);
 
   let activity = discord_sdk::activity::ActivityBuilder::default()
     .details("Playing")
@@ -34,7 +35,7 @@ pub async fn launch(
     .update_activity(activity)
     .await
     .map_err(|e| e.to_string())?;
-  println!("Updated activity: {:?}", activity);
+  info!("Updated activity: {:?}", activity);
   client_lock.activity_set = true;
   Ok(())
 }
@@ -61,10 +62,10 @@ pub async fn set_options(
   new_options: Options,
 ) -> Result<(), ()> {
   let mut options_lock = options.lock().await;
-  println!("new_options: {:?}", new_options);
+  info!("new_options: {:?}", new_options);
   *options_lock = new_options;
   if let Err(e) = options_lock.save_to_file(OPTIONS_PATH) {
-    println!("Error saving {OPTIONS_PATH}: {}", e);
+    error!("Error saving {OPTIONS_PATH}: {}", e);
   }
 
   Ok(())
@@ -86,5 +87,5 @@ pub async fn user(
 
 #[tauri::command]
 pub fn log(msg: String) {
-  println!("{}", msg);
+  info!("{}", msg);
 }

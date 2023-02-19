@@ -11,22 +11,28 @@ mod commands;
 mod discord;
 mod options;
 use options::Options;
+use tracing::{error, info};
 
 pub static APP_ID: i64 = 1062430347557613610;
 pub static OPTIONS_PATH: &str = "options.ron";
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
+  tracing_subscriber::fmt()
+    .compact()
+    .with_max_level(tracing::Level::TRACE)
+    .init();
+
   let discord_client = discord::Client::new(APP_ID).await?;
   let discord_client = Arc::new(Mutex::new(discord_client));
 
   let config = match Options::load_from_file(OPTIONS_PATH) {
     Ok(o) => {
-      println!("Loaded options.ron successfully");
+      info!("Loaded options.ron successfully");
       o
     }
     Err(e) => {
-      println!("Error loading {OPTIONS_PATH}: {}", e);
+      error!("Error loading {OPTIONS_PATH}: {}", e);
       Options::default()
     }
   };
