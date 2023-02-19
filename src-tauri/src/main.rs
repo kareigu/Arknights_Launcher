@@ -5,7 +5,6 @@
 
 use std::{sync::Arc, time::SystemTime};
 
-use discord_sdk::{activity::Activity, Discord};
 use runas::Command;
 use std::error::Error;
 use tauri::async_runtime::Mutex;
@@ -13,13 +12,15 @@ use tauri::async_runtime::Mutex;
 mod options;
 use options::Options;
 
+mod discord;
+
 static APP_ID: i64 = 1062430347557613610;
 static OPTIONS_PATH: &str = "options.ron";
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
 async fn launch(
-  client: tauri::State<'_, Arc<Mutex<Client>>>,
+  client: tauri::State<'_, Arc<Mutex<discord::Client>>>,
   options: tauri::State<'_, Arc<Mutex<Options>>>,
 ) -> Result<(), String> {
   println!("Launching Arknights");
@@ -52,7 +53,7 @@ async fn launch(
 }
 
 #[tauri::command]
-async fn stop(client: tauri::State<'_, Arc<Mutex<Client>>>) -> Result<(), String> {
+async fn stop(client: tauri::State<'_, Arc<Mutex<discord::Client>>>) -> Result<(), String> {
   client
     .lock()
     .await
@@ -83,7 +84,7 @@ async fn set_options(
 }
 
 #[tauri::command]
-async fn has_activity(client: tauri::State<'_, Arc<Mutex<Client>>>) -> Result<bool, ()> {
+async fn has_activity(client: tauri::State<'_, Arc<Mutex<discord::Client>>>) -> Result<bool, ()> {
   Ok(client.lock().await.activity_set)
 }
 
@@ -92,50 +93,10 @@ fn log(msg: String) {
   println!("{}", msg);
 }
 
-struct Client {
-  pub discord: discord_sdk::Discord,
-  pub user: discord_sdk::user::User,
-  pub wheel: discord_sdk::wheel::Wheel,
-  pub activity_set: bool,
-}
-
-impl Client {
-  pub async fn clear_activity(&mut self) -> Result<Option<Activity>, discord_sdk::Error> {
-    let activity = self.discord.clear_activity().await?;
-    self.activity_set = false;
-    Ok(activity)
-  }
-}
-
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-  let (wheel, handler) = discord_sdk::wheel::Wheel::new(Box::new(|e| {
-    println!("{}", e);
-  }));
-
-  let mut user = wheel.user();
-
-  let discord = Discord::new(
-    discord_sdk::DiscordApp::PlainId(APP_ID),
-    discord_sdk::Subscriptions::ACTIVITY,
-    Box::new(handler),
-  )?;
-
-  user.0.changed().await.unwrap();
-
-  let user = match &*user.0.borrow() {
-    discord_sdk::wheel::UserState::Connected(user) => user.clone(),
-    discord_sdk::wheel::UserState::Disconnected(e) => {
-      panic!("Failed to connect to discord: {}", e)
-    }
-  };
-
-  let discord_client = Arc::new(Mutex::new(Client {
-    discord,
-    user,
-    wheel,
-    activity_set: false,
-  }));
+  let discord_client = discord::Client::new(APP_ID).await?;
+  let discord_client = Arc::new(Mutex::new(discord_client));
 
   let config = match Options::load_from_file(OPTIONS_PATH) {
     Ok(o) => {
