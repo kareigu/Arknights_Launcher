@@ -5,20 +5,9 @@
 
   let view: View;
   CurrentView.subscribe((v: View) => (view = v));
-
-  function mouseMove(e: MouseEvent) {
-    document.documentElement.style.setProperty(
-      "--mouse-x",
-      `${e.clientX / 340}deg`
-    );
-    document.documentElement.style.setProperty(
-      "--mouse-y",
-      `${e.clientY / 160}deg`
-    );
-  }
 </script>
 
-<main class="main" on:mousemove={mouseMove}>
+<main class="main">
   <div class="character-bg">
     <div>
       <img src="/images/Arknights_logo.webp" alt="Arknights logo" />

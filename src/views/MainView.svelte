@@ -6,8 +6,6 @@
   let has_activity = false;
   let launch_button_text = "Launch";
 
-  let skew_to_hover = false;
-
   async function launch() {
     launch_button_text = has_activity ? "Stopping" : "Launching";
     try {
@@ -17,18 +15,24 @@
     launch_button_text = has_activity ? "Stop" : "Launch";
   }
 
+  function onMouseOver(e: MouseEvent) {
+    document.documentElement.style.setProperty(
+      "--menu-skew-x",
+      `${e.clientX / 340}deg`
+    );
+    document.documentElement.style.setProperty(
+      "--menu-skew-y",
+      `${e.clientY / 160}deg`
+    );
+  }
+
   onMount(async () => {
     const user = await invoke("user", {});
     await invoke("log", { msg: JSON.stringify(user) });
   });
 </script>
 
-<main
-  class="main-buttons"
-  class:skew_to_hover
-  on:mouseenter={() => (skew_to_hover = true)}
-  on:mouseleave={() => (skew_to_hover = false)}
->
+<main class="main-buttons skew-to-hover" on:mousemove={onMouseOver}>
   <button class="launch-button button-text button-border" on:click={launch}>
     <span class="launch-button-text">{launch_button_text}</span>
     <div class="button-dots" />
@@ -50,8 +54,8 @@
     transform: skew(1deg, 2deg);
   }
 
-  .skew_to_hover {
-    transform: skew(var(--mouse-x), var(--mouse-y));
+  .skew-to-hover {
+    transform: skew(var(--menu-skew-x), var(--menu-skew-y));
   }
 
   .button-dots {
