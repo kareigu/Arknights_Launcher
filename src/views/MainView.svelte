@@ -25,12 +25,14 @@
 >
   <button class="launch-button button-text button-border" on:click={launch}>
     <span class="launch-button-text">{launch_button_text}</span>
+    <div class="button-dots" />
   </button>
   <button
     class="options-button button-text button-border"
     on:click={() => CurrentView.set(View.Options)}
   >
-    <span> ⚙️ </span>
+    <span style="position: absolute; top: 1rem; left: 1.2rem;"> ⚙️ </span>
+    <div class="button-dots" />
   </button>
 </main>
 
@@ -44,6 +46,33 @@
 
   .skew_to_hover {
     transform: skew(var(--mouse-x), var(--mouse-y));
+  }
+
+  .button-dots {
+    width: 100%;
+    height: 100%;
+    --mask: linear-gradient(to bottom right, transparent 50%, 92%, black);
+    mask-image: var(--mask);
+    -webkit-mask-image: var(--mask);
+  }
+
+  .button-dots::after {
+    content: "";
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    background-image: radial-gradient(
+      circle at 0.2rem 0.2rem,
+      grey 0.15rem,
+      transparent 0
+    );
+    background-size: 0.5rem 0.5rem;
+    transform: skew(15deg, -5deg) translateY(1rem);
+    transform-origin: top left;
   }
 
   .button-border {
@@ -80,6 +109,7 @@
   }
 
   .options-button {
+    position: relative;
     height: var(--button-height);
     width: var(--secondary-button-width);
     color: var(--ak-white);
