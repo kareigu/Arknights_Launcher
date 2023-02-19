@@ -7,11 +7,14 @@ use std::{sync::Arc, time::SystemTime};
 
 use discord_sdk::{activity::Activity, Discord};
 use runas::Command;
-use serde::{Deserialize, Serialize};
 use std::error::Error;
 use tauri::async_runtime::Mutex;
 
+mod options;
+use options::Options;
+
 static APP_ID: i64 = 1062430347557613610;
+static OPTIONS_PATH: &str = "options.ron";
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -72,6 +75,9 @@ async fn set_options(
   let mut options_lock = options.lock().await;
   println!("new_options: {:?}", new_options);
   *options_lock = new_options;
+  if let Err(e) = options_lock.save_to_file(OPTIONS_PATH) {
+    println!("Error saving {OPTIONS_PATH}: {}", e);
+  }
 
   Ok(())
 }
@@ -99,18 +105,6 @@ impl Client {
     self.activity_set = false;
     Ok(activity)
   }
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug)]
-enum Background {
-  Default(String),
-  Custom(String),
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug)]
-struct Options {
-  pub executable_path: String,
-  pub background: Background,
 }
 
 #[tokio::main]
@@ -143,14 +137,21 @@ async fn main() -> Result<(), Box<dyn Error>> {
     activity_set: false,
   }));
 
-  let config = Arc::new(Mutex::new(Options {
-    executable_path: "L:/Games/Arknights/Arknights.exe.lnk".to_string(),
-    background: Background::Custom("Default".to_string()),
-  }));
+  let config = match Options::load_from_file(OPTIONS_PATH) {
+    Ok(o) => {
+      println!("Loaded options.ron successfully");
+      o
+    }
+    Err(e) => {
+      println!("Error loading {OPTIONS_PATH}: {}", e);
+      Options::default()
+    }
+  };
+  let config_arc = Arc::new(Mutex::new(config));
 
   tauri::Builder::default()
     .manage(discord_client.clone())
-    .manage(config)
+    .manage(config_arc)
     .invoke_handler(tauri::generate_handler![
       launch,
       stop,
