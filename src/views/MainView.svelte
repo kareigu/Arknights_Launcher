@@ -40,7 +40,6 @@
     padding: 0.5rem;
     gap: 0.2rem;
     transform: skew(1deg, 2deg);
-    transition: transform 200ms ease-out;
   }
 
   .skew_to_hover {
