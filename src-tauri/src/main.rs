@@ -9,6 +9,7 @@ use tauri::async_runtime::Mutex;
 
 mod commands;
 mod discord;
+mod log;
 mod options;
 use options::Options;
 use tracing::{error, info};
@@ -50,6 +51,10 @@ async fn main() -> Result<(), Box<dyn Error>> {
       commands::user,
       commands::log,
     ])
+    .on_page_load(|window, _| {
+      let mut main_window_lock = log::MAIN_WINDOW.write().unwrap();
+      *main_window_lock = Some(window.clone());
+    })
     .run(tauri::generate_context!())?;
 
   let mut discord_client_lock = discord_client.lock().await;

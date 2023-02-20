@@ -68,6 +68,7 @@ pub async fn set_options(
     error!("Error saving {OPTIONS_PATH}: {}", e);
   }
 
+  crate::log::info("Options saved");
   Ok(())
 }
 

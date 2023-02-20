@@ -1,10 +1,23 @@
 <script lang="ts">
   import MainView from "./views/MainView.svelte";
   import OptionsView from "./views/OptionsView.svelte";
-  import { View, CurrentView } from "./common";
+  import { View, CurrentView, Log } from "./common";
+  import { listen } from "@tauri-apps/api/event";
+  import { onMount, onDestroy } from "svelte";
+  import type { LogMessage } from "./common";
 
-  let view: View;
-  CurrentView.subscribe((v: View) => (view = v));
+  let unlisten;
+
+  onMount(async () => {
+    unlisten = await listen<LogMessage>("log", (msg) => {
+      console.log(msg);
+      Log.update((log) => [...log, msg.payload]);
+    });
+  });
+
+  onDestroy(() => {
+    if (unlisten) unlisten();
+  });
 </script>
 
 <main class="main">
@@ -13,7 +26,7 @@
       <img src="/images/Arknights_logo.webp" alt="Arknights logo" />
     </div>
 
-    {#if view == View.Options}
+    {#if $CurrentView == View.Options}
       <OptionsView />
     {:else}
       <MainView />

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/tauri";
-  import { View, CurrentView } from "../common";
+  import { View, CurrentView, Log, format_log_message } from "../common";
   import { onMount, onDestroy } from "svelte";
   import { Canvas, Layer, t, type Render } from "svelte-canvas";
   import type { User } from "../common";
@@ -9,6 +9,8 @@
 
   let has_activity = false;
   let launch_button_text = "Launch";
+
+  let message_log_element: HTMLElement;
 
   let date = new Date();
   $: hours = add_leading_zeroes(date.getHours(), 2);
@@ -99,10 +101,21 @@
         >
         <!-- TODO: Implement showing important log messages here-->
         <div class="message-box">
-          <svg height="10" width="16" class="message-box-arrow">
+          <svg
+            height="10"
+            width="16"
+            class="message-box-arrow"
+            on:click={() =>
+              (message_log_element.scrollTop =
+                message_log_element.scrollHeight)}
+          >
             <polygon points="0,0 8,10 16,0" />
           </svg>
-          <span>LOG: sample</span>
+          <div class="message-box-log" bind:this={message_log_element}>
+            {#each $Log as e}
+              <span>{format_log_message(e)}</span>
+            {/each}
+          </div>
         </div>
       </div>
     {:else}
@@ -182,7 +195,7 @@
 
   .message-box {
     position: relative;
-    width: 100%;
+    width: 18rem;
     height: 3rem;
     background: rgba(0, 0, 0, 0.6);
     padding: 0.5rem 0.5rem;
@@ -211,6 +224,38 @@
     position: absolute;
     right: 0.3rem;
     bottom: 0.4rem;
+    cursor: pointer;
+  }
+
+  .message-box-arrow:hover {
+    filter: brightness(0.5);
+  }
+
+  .message-box-arrow:active {
+    filter: brightness(1.5);
+  }
+
+  .message-box-log {
+    overflow-y: scroll;
+    height: 100%;
+  }
+
+  .message-box-log > span {
+    display: block;
+    line-height: 1.15rem;
+  }
+
+  .message-box-log::-webkit-scrollbar {
+    width: 0.4rem;
+    background: rgba(0, 0, 0, 0.4);
+  }
+
+  .message-box-log::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .message-box-log::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
   }
 
   .main-buttons {
