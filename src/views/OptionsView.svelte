@@ -30,7 +30,7 @@
 
   onMount(async () => {
     options = await invoke("options", {});
-    await invoke("log", { msg: JSON.stringify(options) });
+    console.log(options);
     executablePath = options.executable_path;
   });
 </script>

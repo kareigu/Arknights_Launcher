@@ -13,4 +13,10 @@ export interface Options {
   }
 }
 
+export interface User {
+  discriminator: number,
+  id: number,
+  name: string,
+}
+
 export const CurrentView = writable(View.Main);

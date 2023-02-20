@@ -34,6 +34,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@tsconfig/svelte", "npm:3.0.0"],\
             ["@types/node", "npm:18.13.0"],\
             ["svelte", "npm:3.55.1"],\
+            ["svelte-canvas", "npm:0.9.0"],\
             ["svelte-check", "virtual:2b97bf6c91c8296b3898fafd615195e3e4da73bfda1c681554d5fbf1f0a4bff357853e03ea11023fdcbb28bedfdee54597f90d3e1b1d3ee361f7a82052ce142c#npm:3.0.3"],\
             ["svelte-preprocess", "virtual:2b97bf6c91c8296b3898fafd615195e3e4da73bfda1c681554d5fbf1f0a4bff357853e03ea11023fdcbb28bedfdee54597f90d3e1b1d3ee361f7a82052ce142c#npm:5.0.1"],\
             ["tslib", "npm:2.5.0"],\
@@ -529,6 +530,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@tsconfig/svelte", "npm:3.0.0"],\
             ["@types/node", "npm:18.13.0"],\
             ["svelte", "npm:3.55.1"],\
+            ["svelte-canvas", "npm:0.9.0"],\
             ["svelte-check", "virtual:2b97bf6c91c8296b3898fafd615195e3e4da73bfda1c681554d5fbf1f0a4bff357853e03ea11023fdcbb28bedfdee54597f90d3e1b1d3ee361f7a82052ce142c#npm:3.0.3"],\
             ["svelte-preprocess", "virtual:2b97bf6c91c8296b3898fafd615195e3e4da73bfda1c681554d5fbf1f0a4bff357853e03ea11023fdcbb28bedfdee54597f90d3e1b1d3ee361f7a82052ce142c#npm:5.0.1"],\
             ["tslib", "npm:2.5.0"],\
@@ -1975,6 +1977,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/svelte-npm-3.55.1-0dea483a5d-ce66391bae.zip/node_modules/svelte/",\
           "packageDependencies": [\
             ["svelte", "npm:3.55.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["svelte-canvas", [\
+        ["npm:0.9.0", {\
+          "packageLocation": "./.yarn/cache/svelte-canvas-npm-0.9.0-936994c51e-472926d450.zip/node_modules/svelte-canvas/",\
+          "packageDependencies": [\
+            ["svelte-canvas", "npm:0.9.0"]\
           ],\
           "linkType": "HARD"\
         }]\

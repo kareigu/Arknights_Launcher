@@ -409,6 +409,7 @@ __metadata:
     "@tsconfig/svelte": ^3.0.0
     "@types/node": ^18.7.10
     svelte: ^3.54.0
+    svelte-canvas: ^0.9.0
     svelte-check: ^3.0.0
     svelte-preprocess: ^5.0.0
     tslib: ^2.4.1
@@ -1742,6 +1743,13 @@ __metadata:
   version: 1.0.0
   resolution: "supports-preserve-symlinks-flag@npm:1.0.0"
   checksum: 53b1e247e68e05db7b3808b99b892bd36fb096e6fba213a06da7fab22045e97597db425c724f2bbd6c99a3c295e1e73f3e4de78592289f38431049e1277ca0ae
+  languageName: node
+  linkType: hard
+
+"svelte-canvas@npm:^0.9.0":
+  version: 0.9.0
+  resolution: "svelte-canvas@npm:0.9.0"
+  checksum: 472926d450bc69f4c0c1ebe4b8e08b92e66074b043f81f1e9815d3633bbf2782080a07f7656fbd48cb3d71447bd6ba16debff6a93b96d5ca5be6afc7f74eff42
   languageName: node
   linkType: hard
 
