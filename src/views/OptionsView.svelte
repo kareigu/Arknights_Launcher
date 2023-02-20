@@ -35,6 +35,8 @@
   });
 </script>
 
+<!-- TODO: Redesign this view to look more coherent with the main view-->
+
 <main class="options-view">
   <div class="header">
     <h1>Options</h1>
@@ -56,6 +58,7 @@
       >
     </div>
 
+    <!-- TODO: Support changing the background -->
     <h2>Background</h2>
 
     <div class="save-buttons">

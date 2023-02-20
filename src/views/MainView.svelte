@@ -98,6 +98,7 @@
         <span class="user-name"
           >Dr. {user.name} #{format_discriminator(user.discriminator)}</span
         >
+        <!-- TODO: Implement showing important log messages here-->
         <div class="message-box">
           <svg height="10" width="16" class="message-box-arrow">
             <polygon points="0,0 8,10 16,0" />
@@ -106,6 +107,8 @@
         </div>
       </div>
     {:else}
+      <!-- TODO: Have a better looking solution for when no user data is available-->
+      <!-- TODO: It shouldn't remove the log from view especially-->
       <div>
         <span>Loading</span>
       </div>
