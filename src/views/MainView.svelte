@@ -11,17 +11,13 @@
   let launch_button_text = "Launch";
 
   let date = new Date();
-  $: hours = add_leading_zero(date.getHours());
-  $: minutes = add_leading_zero(date.getMinutes());
+  $: hours = add_leading_zeroes(date.getHours(), 2);
+  $: minutes = add_leading_zeroes(date.getMinutes(), 2);
 
-  function add_leading_zero(n: number): string {
-    return n < 10 ? `0${n}` : n.toString();
-  }
-
-  function format_discriminator(n: number): string {
+  function add_leading_zeroes(n: number, digits: number): string {
     const as_string = n.toString();
     let placeholder = "";
-    for (let i = 0; i < 4 - as_string.length; i++) placeholder += "0";
+    for (let i = 0; i < digits - as_string.length; i++) placeholder += "0";
 
     return placeholder + as_string;
   }
@@ -46,9 +42,17 @@
     );
   }
 
-  $: render = ({ context, width }) => {
+  $: render = ({
+    context,
+    width,
+  }: {
+    context: CanvasRenderingContext2D;
+    width: number;
+  }) => {
     const lineWidth = 5;
     const radius = (width - lineWidth) / 2;
+    context.lineCap = "square";
+    context.lineWidth = lineWidth;
     const drawCircle = (color: string, percent: number) => {
       context.beginPath();
       context.arc(
@@ -60,18 +64,13 @@
         false
       );
       context.strokeStyle = color;
-      context.lineCap = "square";
-      context.lineWidth = lineWidth;
       context.stroke();
     };
     drawCircle("#fefefe", 1);
     drawCircle("#f5de47", date.getSeconds() / 60);
   };
 
-  let getCanvas;
   onMount(async () => {
-    getCanvas().style.setProperty("transform", "rotateZ(-90deg)");
-
     const data = await invoke("user", {});
     user = data;
     console.log(user);
@@ -87,7 +86,7 @@
 <main class="main-view">
   <div class="profile-info">
     <div class="timer-container">
-      <Canvas width={100} height={100} bind:getCanvas>
+      <Canvas width={100} height={100} style="transform: rotateZ(-90deg);">
         <Layer {render} />
       </Canvas>
       <span class="clock">{hours}:{minutes}</span>
@@ -96,7 +95,7 @@
     {#if user}
       <div class="user-info-container">
         <span class="user-name"
-          >Dr. {user.name} #{format_discriminator(user.discriminator)}</span
+          >Dr. {user.name} #{add_leading_zeroes(user.discriminator, 4)}</span
         >
         <!-- TODO: Implement showing important log messages here-->
         <div class="message-box">
