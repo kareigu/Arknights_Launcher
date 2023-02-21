@@ -2,6 +2,7 @@
   import { open } from "@tauri-apps/api/dialog";
   import { invoke } from "@tauri-apps/api/tauri";
   import { onMount } from "svelte";
+  import { fade } from "svelte/transition";
   import { View, CurrentView } from "../common";
   import type { Options } from "../common";
 
@@ -28,6 +29,10 @@
     await invoke("set_options", { newOptions: options });
   }
 
+  function close() {
+    CurrentView.set(View.Main);
+  }
+
   onMount(async () => {
     options = await invoke("options", {});
     console.log(options);
@@ -37,9 +42,9 @@
 
 <!-- TODO: Redesign this view to look more coherent with the main view-->
 
-<main class="options-view">
+<main class="options-view" in:fade>
   <div class="header">
-    <button class="close-button" on:click={() => CurrentView.set(View.Main)}>
+    <button class="close-button" on:click={close}>
       {"<"}
     </button>
     <div class="options-title">

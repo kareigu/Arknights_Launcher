@@ -2,6 +2,7 @@
   import { invoke } from "@tauri-apps/api/tauri";
   import { View, CurrentView, Log, format_log_message } from "../common";
   import { onMount, onDestroy } from "svelte";
+  import { fade } from "svelte/transition";
   import { Canvas, Layer, t, type Render } from "svelte-canvas";
   import type { User } from "../common";
 
@@ -93,7 +94,7 @@
   });
 </script>
 
-<main class="main-view">
+<main class="main-view" in:fade>
   <div class="profile-info">
     <div class="timer-container">
       <Canvas width={100} height={100} style="transform: rotateZ(-90deg);">
