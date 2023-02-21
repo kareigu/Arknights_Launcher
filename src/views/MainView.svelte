@@ -72,6 +72,12 @@
     drawCircle("#f5de47", date.getSeconds() / 60);
   };
 
+  $: {
+    $Log;
+    if (message_log_element)
+      message_log_element.scrollTop = message_log_element.scrollHeight;
+  }
+
   onMount(async () => {
     const data = await invoke("user", {});
     user = data;
