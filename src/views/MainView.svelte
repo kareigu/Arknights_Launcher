@@ -278,47 +278,6 @@
     transform: skew(var(--menu-skew-x), var(--menu-skew-y));
   }
 
-  .button-dots {
-    width: 100%;
-    height: 100%;
-    --mask: linear-gradient(to bottom right, transparent 50%, 92%, black);
-    mask-image: var(--mask);
-    -webkit-mask-image: var(--mask);
-  }
-
-  .button-dots::after {
-    content: "";
-    display: block;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    z-index: -1;
-    top: 0;
-    left: 0;
-    background-image: radial-gradient(
-      circle at 0.2rem 0.2rem,
-      grey 0.15rem,
-      transparent 0
-    );
-    background-size: 0.5rem 0.5rem;
-    transform: skew(15deg, -5deg) translateY(1rem);
-    transform-origin: top left;
-  }
-
-  .button-border {
-    border-width: 0.15rem;
-    border-color: rgba(0, 0, 0, 0.1);
-    border-style: none outset outset none;
-  }
-
-  .button-border:hover {
-    border-width: 0.18rem;
-  }
-
-  .button-border:active {
-    border-width: 0.2rem;
-  }
-
   .launch-button {
     height: var(--button-height);
     width: var(--primary-button-width);

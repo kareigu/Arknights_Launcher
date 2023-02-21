@@ -39,13 +39,16 @@
 
 <main class="options-view">
   <div class="header">
-    <h1>Options</h1>
     <button class="close-button" on:click={() => CurrentView.set(View.Main)}>
-      X
+      {"<"}
     </button>
+    <div class="options-title">
+      <span class="options-icon">⚙️</span>
+      <span>Options</span>
+    </div>
   </div>
   <div class="options">
-    <h2>Executable file path</h2>
+    <h2>Executable File Path</h2>
     <div class="executable-path-select">
       <input
         type="text"
@@ -61,57 +64,80 @@
     <!-- TODO: Support changing the background -->
     <h2>Background</h2>
 
-    <div class="save-buttons">
-      <button class="option-button" on:click={save}>Save</button>
-      <button class="option-button" disabled>Undo</button>
+    <div class="save-button-container">
+      <button class="save-button button-border" on:click={save}>
+        <span class="save-button-text">Save</span>
+        <img class="save-button-icon" src="/icons/icons8-save-50.png" />
+        <div class="button-dots" />
+      </button>
     </div>
   </div>
 </main>
 
 <style>
   .options-view {
+    --background-blur: blur(3px);
     width: 80%;
-    background-color: var(--ak-grey);
     border-radius: 0.2rem;
+    font-family: "PT Sans";
     box-shadow: 0.4rem 0.4rem 0.5rem rgba(0, 0, 0, 0.2);
   }
 
   .header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
     position: relative;
     text-align: center;
     width: 100%;
     user-select: none;
-    font-weight: bold;
     text-transform: uppercase;
+    line-height: 1rem;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: var(--background-blur);
+    border-bottom: 0.5rem solid var(--ak-white);
+    box-shadow: 0rem 1rem 0.1rem rgba(0, 0, 0, 0.5);
   }
 
-  .header > h1 {
-    font-weight: bold;
+  .options-title {
+    background-color: var(--ak-white);
+    color: var(--ak-black);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 400;
+    font-size: 0.8rem;
     font-variant-caps: unicase;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    padding: 0.8rem 0.4rem;
+  }
+
+  .options-icon {
+    font-size: 1.8rem;
+    text-shadow: 0.1rem 0.2rem 0.4rem rgba(0, 0, 0, 0.5);
+    filter: grayscale(1) contrast(1.5) invert(1);
   }
 
   .close-button {
-    position: absolute;
-    top: -0.5rem;
-    right: 0.8rem;
+    width: 5rem;
+    height: 1.5rem;
+    margin-left: 1rem;
 
-    width: 3rem;
-    height: 3rem;
-
-    border: 0.15rem solid var(--ak-white);
-    border-radius: 100%;
-    background-color: var(--ak-black);
-    color: var(--ak-white);
-    font-weight: 700;
-    font-size: 2rem;
-    box-shadow: inset 0.1rem 0.2rem 0.2rem rgba(255, 255, 255, 0.3);
+    border: 0;
+    border-radius: 0.1rem;
+    background-color: var(--ak-white);
+    color: var(--ak-black);
+    font-size: 1.5rem;
+    text-align: left;
+    line-height: 1rem;
+    box-shadow: 0.2rem 0.3rem 0.4rem rgba(255, 255, 255, 0.3);
     transition: all 80ms ease-in;
   }
 
   .close-button:hover {
     background-color: var(--button-grey);
     color: var(--ak-black);
-    box-shadow: inset 0.01rem 0.05rem 0.4rem rgba(0, 0, 0, 0.8);
   }
 
   .close-button:active {
@@ -122,37 +148,48 @@
   }
 
   .options {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: var(--ak-white-translucent);
+    backdrop-filter: var(--background-blur);
     width: 100%;
-    padding-top: 0.2rem;
-    padding-bottom: 2rem;
+    padding: 0.2rem 0rem;
+  }
+
+  .options > h2 {
+    background-color: var(--ak-black);
+    width: 90%;
+    font-weight: normal;
+    text-align: left;
+    padding: 0.1rem 1rem;
+    font-size: 1.2rem;
+    border: 0.1rem white inset;
+    user-select: none;
   }
 
   .option-button {
     background-color: var(--ak-black);
     border-radius: 5rem;
-    border: 0.15rem solid rgba(255, 255, 255, 0.2);
+    border: 0.1rem solid var(--ak-white);
     color: var(--ak-white);
     font-family: "PT Sans";
-    font-weight: bold;
-    font-size: 1rem;
-    text-transform: uppercase;
-    border-radius: 0.15rem;
-    box-shadow: 0.4rem 0.4rem 0.5rem rgba(0, 0, 0, 0.2);
+    font-weight: normal;
+    font-size: 0.7rem;
+    border-radius: 0.1rem;
+    padding: 0.2rem 2rem;
+    box-shadow: 0.1rem 0.4rem 0.3rem rgba(0, 0, 0, 0.2);
     user-select: none;
     transition: all 80ms ease-in;
   }
 
   .option-button:hover:not([disabled]) {
-    border-color: rgba(255, 255, 255, 0.4);
-    box-shadow: 0.1rem 0.1rem 0.4rem rgba(0, 0, 0, 0.2);
+    filter: brightness(0.8);
   }
 
   .option-button:active:not([disabled]) {
-    border-color: rgba(255, 255, 255, 0.6);
-    box-shadow: 0rem 0rem 0.2rem rgba(0, 0, 0, 0.2);
+    filter: brightness(1.1);
   }
 
   .option-button:disabled {
@@ -179,14 +216,43 @@
     gap: 0.5rem;
   }
 
-  .save-buttons {
-    padding-top: 3rem;
-    height: 2rem;
+  .save-button-container {
+    padding: 0.5rem 1rem;
     display: flex;
-    gap: 2rem;
+    justify-content: end;
+    width: 95%;
   }
 
-  .save-buttons > button {
-    height: 100%;
+  .save-button {
+    height: calc(var(--button-height) / 1.5);
+    width: calc(var(--primary-button-width) / 2);
+    position: relative;
+    color: var(--ak-white);
+    background-color: var(--button-blue);
+    font-size: 1.7rem;
+    font-weight: bold;
+    transition: all 80ms ease-in;
+  }
+
+  .save-button:hover {
+    background-color: var(--button-light-blue);
+  }
+
+  .save-button-text {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 1rem;
+    z-index: 2;
+  }
+
+  .save-button-icon {
+    position: absolute;
+    font-size: 3rem;
+    right: 0.9rem;
+    top: 0.4rem;
+    opacity: 0.5;
+    color: white;
+    filter: invert(1);
+    z-index: 1;
   }
 </style>
