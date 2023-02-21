@@ -173,7 +173,7 @@
 
   .clock {
     font-size: 2rem;
-    font-weight: bold;
+    font-weight: normal;
     position: absolute;
     top: 50%;
     left: 50%;
