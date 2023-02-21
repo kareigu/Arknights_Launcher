@@ -143,7 +143,11 @@
       class="options-button button-text button-border"
       on:click={() => CurrentView.set(View.Options)}
     >
-      <span style="position: absolute; top: 1rem; left: 1.2rem;"> ⚙️ </span>
+      <span
+        style="position: absolute; top: 1rem; left: 1.2rem; filter: grayscale(1) contrast(1.5) invert(1);"
+      >
+        ⚙️
+      </span>
       <div class="button-dots" />
     </button>
   </div>
