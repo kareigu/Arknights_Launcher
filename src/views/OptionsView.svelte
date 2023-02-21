@@ -47,7 +47,7 @@
       {"<"}
     </button>
     <div class="options-title">
-      <span class="options-icon">⚙️</span>
+      <img src="/icons/icons8-engineering-50.png" class="options-icon" />
       <span>Options</span>
     </div>
   </div>
@@ -144,13 +144,14 @@
     font-variant-caps: unicase;
     margin-block-start: 0;
     margin-block-end: 0;
-    padding: 0.8rem 0.4rem;
+    padding: 0.2rem 0.4rem;
+    position: relative;
   }
 
   .options-icon {
-    font-size: 1.8rem;
-    text-shadow: 0.1rem 0.2rem 0.4rem rgba(0, 0, 0, 0.5);
-    filter: grayscale(1) contrast(1.5) invert(1);
+    width: 1.8rem;
+    margin-right: 0.4rem;
+    filter: drop-shadow(0 1.5mm 1mm rgba(0, 0, 0, 0.4));
   }
 
   .close-button {

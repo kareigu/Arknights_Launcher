@@ -10,6 +10,10 @@
 
   let has_activity = false;
   let launch_button_text = "Launch";
+  $: launch_button_icon =
+    launch_button_text === "Launch"
+      ? "icons8-play-button-circled-50.png"
+      : "icons8-pause-squared-50.png";
 
   let message_log_element: HTMLElement;
 
@@ -137,17 +141,14 @@
   <div class="main-buttons skew-to-hover" on:mousemove={onMouseOver}>
     <button class="launch-button button-text button-border" on:click={launch}>
       <span class="launch-button-text">{launch_button_text}</span>
+      <img src={`/icons/${launch_button_icon}`} class="launch-button-icon" />
       <div class="button-dots" />
     </button>
     <button
       class="options-button button-text button-border"
       on:click={() => CurrentView.set(View.Options)}
     >
-      <span
-        style="position: absolute; top: 1rem; left: 1.2rem; filter: grayscale(1) contrast(1.5) invert(1);"
-      >
-        ⚙️
-      </span>
+      <img src="/icons/icons8-engineering-50.png" class="options-icon" />
       <div class="button-dots" />
     </button>
   </div>
@@ -301,6 +302,14 @@
     left: 0.6rem;
   }
 
+  .launch-button-icon {
+    position: absolute;
+    opacity: 0.5;
+    right: 1.5rem;
+    top: 0.6rem;
+    width: 5rem;
+  }
+
   .options-button {
     position: relative;
     height: var(--button-height);
@@ -312,5 +321,13 @@
 
   .options-button:hover {
     background-color: var(--button-light-blue);
+  }
+
+  .options-icon {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.7rem;
+    filter: invert(1);
+    opacity: 0.8;
   }
 </style>
