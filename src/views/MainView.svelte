@@ -108,7 +108,6 @@
         <span class="user-name"
           >Dr. {user.name} #{add_leading_zeroes(user.discriminator, 4)}</span
         >
-        <!-- TODO: Implement showing important log messages here-->
         <div class="message-box">
           <svg
             height="10"
