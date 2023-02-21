@@ -5,6 +5,7 @@
   import { fade } from "svelte/transition";
   import { View, CurrentView } from "../common";
   import type { Options } from "../common";
+  import backgrounds from "../backgrounds.json";
 
   let options: Options = { executable_path: "", background: {} };
   let executablePath = "";
@@ -40,8 +41,6 @@
   });
 </script>
 
-<!-- TODO: Redesign this view to look more coherent with the main view-->
-
 <main class="options-view" in:fade>
   <div class="header">
     <button class="close-button" on:click={close}>
@@ -68,6 +67,34 @@
 
     <!-- TODO: Support changing the background -->
     <h2>Background</h2>
+    <div class="picture-select">
+      <span class="picture-select-label">Background:</span>
+      <div class="picture-select-options">
+        {#each backgrounds.backgrounds as background}
+          <span class="picture-select-option">
+            <img
+              class="picture"
+              src={`/images/backgrounds/${background}`}
+              width="150rem"
+            />
+          </span>
+        {/each}
+      </div>
+    </div>
+    <div class="picture-select">
+      <span class="picture-select-label">Character:</span>
+      <div class="picture-select-options">
+        {#each backgrounds.characters as character}
+          <span class="picture-select-option">
+            <img
+              class="picture"
+              src={`/images/backgrounds/${character}`}
+              width="150rem"
+            />
+          </span>
+        {/each}
+      </div>
+    </div>
 
     <div class="save-button-container">
       <button class="save-button button-border" on:click={save}>
@@ -82,10 +109,12 @@
 <style>
   .options-view {
     --background-blur: blur(3px);
-    width: 80%;
+    width: 100%;
     border-radius: 0.2rem;
     font-family: "PT Sans";
     box-shadow: 0.4rem 0.4rem 0.5rem rgba(0, 0, 0, 0.2);
+    height: 100%;
+    overflow: hidden;
   }
 
   .header {
@@ -160,7 +189,20 @@
     background-color: var(--ak-white-translucent);
     backdrop-filter: var(--background-blur);
     width: 100%;
-    padding: 0.2rem 0rem;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  .options::-webkit-scrollbar {
+    background: var(--ak-white-translucent);
+    backdrop-filter: var(--background-blur);
+    width: 0.4rem;
+  }
+
+  .options::-webkit-scrollbar-thumb {
+    background: var(--ak-black);
+    border-radius: 1rem;
   }
 
   .options > h2 {
@@ -219,6 +261,49 @@
     display: flex;
     justify-content: center;
     gap: 0.5rem;
+  }
+
+  .picture-select {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--ak-black);
+    width: 90%;
+    margin: 0.5rem 0rem;
+    user-select: none;
+  }
+
+  .picture-select-label {
+    width: 7rem;
+  }
+
+  .picture-select-options {
+    background-color: var(--ak-black);
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    border: 0.1rem white inset;
+    width: 100%;
+    padding: 0.2rem 0.5rem;
+    overflow-x: scroll;
+  }
+
+  .picture-select-options::-webkit-scrollbar {
+    background: var(--ak-black);
+    height: 0.4rem;
+  }
+
+  .picture-select-options::-webkit-scrollbar-thumb {
+    background: var(--ak-white-translucent);
+  }
+
+  .picture {
+    cursor: pointer;
+    border: 0.1rem inset var(--ak-grey);
+  }
+
+  .picture:hover {
+    border: 0.1rem outset var(--ak-white);
   }
 
   .save-button-container {

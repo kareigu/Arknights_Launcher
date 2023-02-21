@@ -5,6 +5,7 @@
   import { listen } from "@tauri-apps/api/event";
   import { invoke } from "@tauri-apps/api";
   import { onMount, onDestroy } from "svelte";
+  import { fade } from "svelte/transition";
   import type { LogMessage } from "./common";
 
   let unlisten;
@@ -25,13 +26,12 @@
 
 <main class="main">
   <div class="character-bg">
-    <div>
-      <img src="/images/Arknights_logo.webp" alt="Arknights logo" />
-    </div>
-
     {#if $CurrentView == View.Options}
       <OptionsView />
     {:else}
+      <div in:fade>
+        <img src="/images/Arknights_logo.webp" alt="Arknights logo" />
+      </div>
       <MainView />
     {/if}
   </div>
