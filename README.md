@@ -1,8 +1,19 @@
 # Arknights Launcher
 
-Tauri application for launching Arknights on PC.  
+![Arknights logo](icon.png)
 
-Supports having rich presence on Discord.
+## Tauri application for launching Arknights on PC.  
+
+![Picture of the main view](images/MainView.png)
+
+## Features
+* Rich presence on Discord
+* Configurable launch file
+* Multiple choices of background
+
+![Picture of the options](images/OptionsView.png)
+
+<b>Icons from [icons8](https://icons8.com/)</b>
 
 ## Recommended IDE Setup
 
