@@ -87,6 +87,9 @@
     const data = await invoke("user", {});
     user = data;
     console.log(user);
+    const res = await invoke("has_activity", {});
+    has_activity = res;
+    launch_button_text = has_activity ? "Stop" : "Launch";
     document.documentElement.style.setProperty("--menu-skew-x", "1.75deg");
     document.documentElement.style.setProperty("--menu-skew-y", "2.85deg");
   });
