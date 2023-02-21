@@ -36,6 +36,7 @@ pub async fn launch(
     .await
     .map_err(|e| e.to_string())?;
   info!("Updated activity: {:?}", activity);
+  crate::log::info("Discord activity set");
   client_lock.activity_set = true;
   Ok(())
 }
@@ -87,6 +88,6 @@ pub async fn user(
 }
 
 #[tauri::command]
-pub fn log(msg: String) {
-  info!("{}", msg);
+pub fn initialise() {
+  crate::log::info("Initialised");
 }

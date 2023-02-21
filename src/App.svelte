@@ -3,6 +3,7 @@
   import OptionsView from "./views/OptionsView.svelte";
   import { View, CurrentView, Log } from "./common";
   import { listen } from "@tauri-apps/api/event";
+  import { invoke } from "@tauri-apps/api";
   import { onMount, onDestroy } from "svelte";
   import type { LogMessage } from "./common";
 
@@ -13,6 +14,8 @@
       console.log(msg);
       Log.update((log) => [...log, msg.payload]);
     });
+
+    await invoke("initialise", {});
   });
 
   onDestroy(() => {

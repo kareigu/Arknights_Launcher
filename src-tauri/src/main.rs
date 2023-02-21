@@ -26,14 +26,19 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
   let discord_client = discord::Client::new(APP_ID).await?;
   let discord_client = Arc::new(Mutex::new(discord_client));
+  log::info("Discord connection initialised");
 
   let config = match Options::load_from_file(OPTIONS_PATH) {
     Ok(o) => {
-      info!("Loaded options.ron successfully");
+      let msg = format!("Loaded {OPTIONS_PATH} successfully");
+      info!(msg);
+      log::info(msg);
       o
     }
     Err(e) => {
       error!("Error loading {OPTIONS_PATH}: {}", e);
+      log::error(format!("Error loading {OPTIONS_PATH}"));
+      log::warn("Using default settings");
       Options::default()
     }
   };
@@ -49,7 +54,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
       commands::set_options,
       commands::has_activity,
       commands::user,
-      commands::log,
+      commands::initialise,
     ])
     .on_page_load(|window, _| {
       let mut main_window_lock = log::MAIN_WINDOW.write().unwrap();

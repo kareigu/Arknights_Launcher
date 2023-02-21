@@ -34,4 +34,4 @@ export function format_log_message(msg: LogMessage): string {
 }
 
 export const CurrentView = writable(View.Main);
-export const Log = writable([{ msg_type: "Info", msg: "Initialised" }]);
+export const Log = writable([]);

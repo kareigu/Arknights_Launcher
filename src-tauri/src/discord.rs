@@ -50,6 +50,7 @@ impl Client {
   pub async fn clear_activity(&mut self) -> Result<Option<Activity>, discord_sdk::Error> {
     let activity = self.discord.clear_activity().await?;
     self.activity_set = false;
+    crate::log::info("Discord activity cleared");
     Ok(activity)
   }
 
