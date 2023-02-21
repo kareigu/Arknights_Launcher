@@ -301,6 +301,7 @@
   .picture {
     cursor: pointer;
     border: 0.1rem inset var(--ak-grey);
+    animation: blur-in 80ms ease-in;
   }
 
   .picture:hover {
@@ -345,5 +346,14 @@
     color: white;
     filter: invert(1);
     z-index: 1;
+  }
+
+  @keyframes blur-in {
+    0% {
+      filter: blur(10px);
+    }
+    100% {
+      filter: blur(0);
+    }
   }
 </style>
