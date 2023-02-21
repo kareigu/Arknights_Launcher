@@ -82,6 +82,8 @@
     const data = await invoke("user", {});
     user = data;
     console.log(user);
+    document.documentElement.style.setProperty("--menu-skew-x", "1.75deg");
+    document.documentElement.style.setProperty("--menu-skew-y", "2.85deg");
   });
 
   const timeInterval = setInterval(() => (date = new Date()), 500);
@@ -268,7 +270,7 @@
     display: flex;
     padding: 0.5rem;
     gap: 0.2rem;
-    transform: skew(1deg, 2deg);
+    /*transform: skew(1deg, 2deg);*/
     user-select: none;
   }
 
