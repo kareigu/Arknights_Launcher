@@ -16,13 +16,14 @@
 
   let unlisten;
   const options_unsubscribe = Options.subscribe((o: IOptions) => {
+    console.log("Options subscription: ", o);
     document.documentElement.style.setProperty(
       "--background-image",
-      `url(${BACKGROUND_BASE_URL}/${o.background.Default?.background})`
+      `url(${BACKGROUND_BASE_URL}/${o.background.Default.background})`
     );
     document.documentElement.style.setProperty(
       "--background-character",
-      `url(${BACKGROUND_BASE_URL}/${o.background.Default?.character})`
+      `url(${BACKGROUND_BASE_URL}/${o.background.Default.character})`
     );
   });
 

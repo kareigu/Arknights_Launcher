@@ -3,7 +3,7 @@
   import { invoke } from "@tauri-apps/api/tauri";
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
-  import { View, CurrentView, Options } from "../common";
+  import { View, CurrentView, Options, BACKGROUND_BASE_URL } from "../common";
   import type { IOptions } from "../common";
   import backgrounds from "../backgrounds.json";
 
@@ -19,14 +19,16 @@
       ],
     });
 
-    Options.update((o: IOptions) => (o.executable_path = path));
+    Options.update((o: IOptions) => ({ ...o, executable_path: path }));
   }
 
   async function save() {
     await invoke("set_options", { newOptions: $Options });
   }
 
-  function close() {
+  async function close() {
+    const options = await invoke("options", {});
+    Options.set(options);
     CurrentView.set(View.Main);
   }
 
@@ -54,12 +56,12 @@
         type="text"
         placeholder="File path to the executable"
         class="text-input path-input"
-        value={$Options?.executable_path}
+        value={$Options.executable_path}
         readonly
       />
       <button
         class="option-button"
-        on:click={() => executablePathBrowse($Options?.executable_path)}
+        on:click={() => executablePathBrowse($Options.executable_path)}
         >Browse</button
       >
     </div>
@@ -73,8 +75,13 @@
           <span class="picture-select-option">
             <img
               class="picture"
-              src={`/images/backgrounds/${background}`}
+              src={`${BACKGROUND_BASE_URL}/${background}`}
               width="150rem"
+              on:click={() =>
+                Options.update((o) => {
+                  o.background.Default.background = background;
+                  return o;
+                })}
             />
           </span>
         {/each}
@@ -87,8 +94,13 @@
           <span class="picture-select-option">
             <img
               class="picture"
-              src={`/images/backgrounds/${character}`}
+              src={`${BACKGROUND_BASE_URL}/${character}`}
               width="150rem"
+              on:click={() =>
+                Options.update((o) => {
+                  o.background.Default.character = character;
+                  return o;
+                })}
             />
           </span>
         {/each}

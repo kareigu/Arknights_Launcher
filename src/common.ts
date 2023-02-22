@@ -43,7 +43,7 @@ const DEFAULT_OPTIONS: IOptions = {
   background: {
     Default: {
       background: "vision.webp",
-      character: "amiya.guard.png",
+      character: "amiya_guard.png",
     }
   }
 }
