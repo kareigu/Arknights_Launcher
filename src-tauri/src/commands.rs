@@ -1,6 +1,5 @@
 use crate::discord;
 use crate::Options;
-use crate::OPTIONS_PATH;
 use runas::Command;
 use std::{sync::Arc, time::SystemTime};
 use tauri::async_runtime::Mutex;
@@ -65,8 +64,9 @@ pub async fn set_options(
   let mut options_lock = options.lock().await;
   info!("new_options: {:?}", new_options);
   *options_lock = new_options;
-  if let Err(e) = options_lock.save_to_file(OPTIONS_PATH) {
-    error!("Error saving {OPTIONS_PATH}: {}", e);
+  let options_path = Options::path();
+  if let Err(e) = options_lock.save_to_file(options_path.clone()) {
+    error!("Error saving {options_path}: {}", e);
   }
 
   crate::log::info("Options saved");

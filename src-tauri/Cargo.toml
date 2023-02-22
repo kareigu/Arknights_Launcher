@@ -14,6 +14,7 @@ tauri-build = { version = "1.2", features = [] }
 
 [dependencies]
 discord-sdk = "0.3.2"
+home = "0.5"
 once_cell = "1.17"
 ron = "0.8"
 runas = "1.0"

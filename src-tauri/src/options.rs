@@ -52,6 +52,14 @@ impl Options {
 
     std::fs::write(path.to_string(), contents).map_err(|e| SaveError::WriteFile(e))
   }
+
+  pub fn path() -> String {
+    let base_dir = match home::home_dir() {
+      Some(p) => p.to_string_lossy().to_string(),
+      None => ".".to_string(),
+    };
+    format!("{base_dir}/.ak_launcher.ron")
+  }
 }
 
 impl Default for Options {

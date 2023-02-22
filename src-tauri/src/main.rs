@@ -15,7 +15,6 @@ use options::Options;
 use tracing::{error, info};
 
 pub static APP_ID: i64 = 1062430347557613610;
-pub static OPTIONS_PATH: &str = "options.ron";
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
@@ -28,16 +27,17 @@ async fn main() -> Result<(), Box<dyn Error>> {
   let discord_client = Arc::new(Mutex::new(discord_client));
   log::info("Discord connection initialised");
 
-  let config = match Options::load_from_file(OPTIONS_PATH) {
+  let options_path = Options::path();
+  let config = match Options::load_from_file(options_path.clone()) {
     Ok(o) => {
-      let msg = format!("Loaded {OPTIONS_PATH} successfully");
+      let msg = format!("Loaded {options_path} successfully");
       info!(msg);
       log::info(msg);
       o
     }
     Err(e) => {
-      error!("Error loading {OPTIONS_PATH}: {}", e);
-      log::error(format!("Error loading {OPTIONS_PATH}"));
+      error!("Error loading {options_path}: {}", e);
+      log::error(format!("Error loading {options_path}"));
       log::warn("Using default settings");
       Options::default()
     }
