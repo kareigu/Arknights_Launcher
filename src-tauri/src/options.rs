@@ -12,8 +12,8 @@ pub enum Background {
 impl Default for Background {
   fn default() -> Self {
     Self::Default(BackgroundComponents {
-      background: "ptilopsis_epoque.webp".to_string(),
-      character: "celebration.webp".to_string(),
+      background: "celebration.webp".to_string(),
+      character: "ptilopsis_epoque.webp".to_string(),
     })
   }
 }
