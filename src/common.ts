@@ -5,7 +5,7 @@ export enum View {
   Options,
 }
 
-export interface Options {
+export interface IOptions {
   executable_path: string,
   background: {
     Custom?: BackgroundComponents,
@@ -33,5 +33,18 @@ export function format_log_message(msg: LogMessage): string {
   return `${msg.msg_type.toUpperCase()}: ${msg.msg}`;
 }
 
-export const CurrentView = writable(View.Main);
-export const Log = writable([]);
+export const BACKGROUND_BASE_URL = "/images/backgrounds";
+
+export const CurrentView = writable<View>(View.Main);
+export const Log = writable<LogMessage[]>([]);
+
+const DEFAULT_OPTIONS: IOptions = {
+  executable_path: "",
+  background: {
+    Default: {
+      background: "vision.webp",
+      character: "amiya.guard.png",
+    }
+  }
+}
+export const Options = writable<IOptions>(DEFAULT_OPTIONS);

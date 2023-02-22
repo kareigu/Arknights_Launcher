@@ -3,16 +3,13 @@
   import { invoke } from "@tauri-apps/api/tauri";
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
-  import { View, CurrentView } from "../common";
-  import type { Options } from "../common";
+  import { View, CurrentView, Options } from "../common";
+  import type { IOptions } from "../common";
   import backgrounds from "../backgrounds.json";
 
-  let options: Options = { executable_path: "", background: {} };
-  let executablePath = "";
-
-  async function executablePathBrowse() {
+  async function executablePathBrowse(defaultPath: string) {
     const path = await open({
-      defaultPath: executablePath,
+      defaultPath,
       multiple: false,
       filters: [
         {
@@ -22,12 +19,11 @@
       ],
     });
 
-    executablePath = path;
+    Options.update((o: IOptions) => (o.executable_path = path));
   }
 
   async function save() {
-    options.executable_path = executablePath;
-    await invoke("set_options", { newOptions: options });
+    await invoke("set_options", { newOptions: $Options });
   }
 
   function close() {
@@ -35,9 +31,9 @@
   }
 
   onMount(async () => {
-    options = await invoke("options", {});
+    const options = await invoke("options", {});
+    Options.set(options);
     console.log(options);
-    executablePath = options.executable_path;
   });
 </script>
 
@@ -58,9 +54,12 @@
         type="text"
         placeholder="File path to the executable"
         class="text-input path-input"
-        value={executablePath}
+        value={$Options?.executable_path}
+        readonly
       />
-      <button class="option-button" on:click={executablePathBrowse}
+      <button
+        class="option-button"
+        on:click={() => executablePathBrowse($Options?.executable_path)}
         >Browse</button
       >
     </div>
