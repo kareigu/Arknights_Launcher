@@ -74,7 +74,11 @@
         {#each backgrounds.backgrounds as background}
           <span class="picture-select-option">
             <img
-              class="picture"
+              class={`picture ${
+                $Options.background.Default.background === background
+                  ? "selected"
+                  : ""
+              }`}
               src={`${BACKGROUND_BASE_URL}/${background}`}
               width="150rem"
               on:click={() =>
@@ -93,7 +97,11 @@
         {#each backgrounds.characters as character}
           <span class="picture-select-option">
             <img
-              class="picture"
+              class={`picture ${
+                $Options.background.Default.character === character
+                  ? "selected"
+                  : ""
+              }`}
               src={`${BACKGROUND_BASE_URL}/${character}`}
               width="150rem"
               on:click={() =>
@@ -311,12 +319,17 @@
 
   .picture {
     cursor: pointer;
-    border: 0.1rem inset var(--ak-grey);
+    border: 0.2rem inset var(--ak-grey);
     animation: blur-in 80ms ease-in;
+    border-radius: 0.5rem;
+  }
+
+  .picture.selected {
+    border: 0.2rem inset var(--button-light-blue);
   }
 
   .picture:hover {
-    border: 0.1rem outset var(--ak-white);
+    border: 0.2rem outset var(--button-blue);
   }
 
   .save-button-container {
