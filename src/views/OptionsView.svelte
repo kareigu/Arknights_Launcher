@@ -28,6 +28,7 @@
 
   async function save() {
     await invoke("set_options", { newOptions: $Options });
+    await close();
   }
 
   async function close() {
