@@ -7,6 +7,8 @@
   import type { IOptions } from "../common";
   import backgrounds from "../backgrounds.json";
 
+  let hidden = false;
+
   async function executablePathBrowse(defaultPath: string) {
     const path = await open({
       defaultPath,
@@ -48,81 +50,89 @@
       <img src="/icons/icons8-engineering-50.png" class="options-icon" />
       <span>Options</span>
     </div>
-  </div>
-  <div class="options">
-    <h2>Executable File Path</h2>
-    <div class="executable-path-select">
-      <input
-        type="text"
-        placeholder="File path to the executable"
-        class="text-input path-input"
-        value={$Options.executable_path}
-        readonly
+    <button class="toggle-hide-button">
+      <img
+        src={hidden ? "/icons/icons8-eye-58.png" : "/icons/icons8-eye-64.png"}
+        width="30"
+        on:click={() => (hidden = !hidden)}
       />
-      <button
-        class="option-button"
-        on:click={() => executablePathBrowse($Options.executable_path)}
-        >Browse</button
-      >
-    </div>
-
-    <!-- TODO: Support changing the background -->
-    <h2>Background</h2>
-    <div class="picture-select">
-      <span class="picture-select-label">Background:</span>
-      <div class="picture-select-options">
-        {#each backgrounds.backgrounds as background}
-          <span class="picture-select-option">
-            <img
-              class={`picture ${
-                $Options.background.Default.background === background
-                  ? "selected"
-                  : ""
-              }`}
-              src={`${BACKGROUND_BASE_URL}/${background}`}
-              width="150rem"
-              on:click={() =>
-                Options.update((o) => {
-                  o.background.Default.background = background;
-                  return o;
-                })}
-            />
-          </span>
-        {/each}
-      </div>
-    </div>
-    <div class="picture-select">
-      <span class="picture-select-label">Character:</span>
-      <div class="picture-select-options">
-        {#each backgrounds.characters as character}
-          <span class="picture-select-option">
-            <img
-              class={`picture ${
-                $Options.background.Default.character === character
-                  ? "selected"
-                  : ""
-              }`}
-              src={`${BACKGROUND_BASE_URL}/${character}`}
-              width="150rem"
-              on:click={() =>
-                Options.update((o) => {
-                  o.background.Default.character = character;
-                  return o;
-                })}
-            />
-          </span>
-        {/each}
-      </div>
-    </div>
-
-    <div class="save-button-container">
-      <button class="save-button button-border" on:click={save}>
-        <span class="save-button-text">Save</span>
-        <img class="save-button-icon" src="/icons/icons8-save-50.png" />
-        <div class="button-dots" />
-      </button>
-    </div>
+    </button>
   </div>
+  {#if !hidden}
+    <div class="options">
+      <h2>Executable File Path</h2>
+      <div class="executable-path-select">
+        <input
+          type="text"
+          placeholder="File path to the executable"
+          class="text-input path-input"
+          value={$Options.executable_path}
+          readonly
+        />
+        <button
+          class="option-button"
+          on:click={() => executablePathBrowse($Options.executable_path)}
+          >Browse</button
+        >
+      </div>
+
+      <h2>Background</h2>
+      <div class="picture-select">
+        <span class="picture-select-label">Background:</span>
+        <div class="picture-select-options">
+          {#each backgrounds.backgrounds as background}
+            <span class="picture-select-option">
+              <img
+                class={`picture ${
+                  $Options.background.Default.background === background
+                    ? "selected"
+                    : ""
+                }`}
+                src={`${BACKGROUND_BASE_URL}/${background}`}
+                width="150rem"
+                on:click={() =>
+                  Options.update((o) => {
+                    o.background.Default.background = background;
+                    return o;
+                  })}
+              />
+            </span>
+          {/each}
+        </div>
+      </div>
+      <div class="picture-select">
+        <span class="picture-select-label">Character:</span>
+        <div class="picture-select-options">
+          {#each backgrounds.characters as character}
+            <span class="picture-select-option">
+              <img
+                class={`picture ${
+                  $Options.background.Default.character === character
+                    ? "selected"
+                    : ""
+                }`}
+                src={`${BACKGROUND_BASE_URL}/${character}`}
+                width="150rem"
+                on:click={() =>
+                  Options.update((o) => {
+                    o.background.Default.character = character;
+                    return o;
+                  })}
+              />
+            </span>
+          {/each}
+        </div>
+      </div>
+
+      <div class="save-button-container">
+        <button class="save-button button-border" on:click={save}>
+          <span class="save-button-text">Save</span>
+          <img class="save-button-icon" src="/icons/icons8-save-50.png" />
+          <div class="button-dots" />
+        </button>
+      </div>
+    </div>
+  {/if}
 </main>
 
 <style>
@@ -201,6 +211,40 @@
     border-color: var(--ak-black);
   }
 
+  .toggle-hide-button {
+    width: 3rem;
+    height: 1.5rem;
+    margin-left: auto;
+    margin-right: 1rem;
+    position: relative;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 0;
+    border-radius: 0.1rem;
+    background-color: var(--ak-white);
+    color: var(--ak-black);
+    font-size: 1.5rem;
+    text-align: left;
+    line-height: 1rem;
+    box-shadow: 0.2rem 0.3rem 0.4rem rgba(255, 255, 255, 0.3);
+    transition: all 80ms ease-in;
+  }
+
+  .toggle-hide-button:hover {
+    background-color: var(--button-grey);
+    color: var(--ak-black);
+  }
+
+  .toggle-hide-button:active {
+    background-color: var(--ak-black);
+    color: var(--ak-grey);
+    box-shadow: inset 0.01rem 0.05rem 0.4rem rgba(0, 0, 0, 1);
+    border-color: var(--ak-black);
+  }
+
   .options {
     position: relative;
     display: flex;
@@ -212,6 +256,7 @@
     height: 100%;
     overflow-x: hidden;
     overflow-y: scroll;
+    animation: blur-in 80ms ease-in;
   }
 
   .options::-webkit-scrollbar {
