@@ -14,6 +14,8 @@ impl Default for Background {
     Self::Default(BackgroundComponents {
       background: "celebration.webp".to_string(),
       character: "ptilopsis_epoque.webp".to_string(),
+      zoom: 100.0,
+      offset: (0.0, 0.0),
     })
   }
 }
@@ -22,6 +24,8 @@ impl Default for Background {
 pub struct BackgroundComponents {
   pub background: String,
   pub character: String,
+  pub zoom: f32,
+  pub offset: (f32, f32),
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]

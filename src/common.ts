@@ -16,6 +16,8 @@ export interface IOptions {
 export interface BackgroundComponents {
   background: string,
   character: string,
+  zoom: number,
+  offset: [number, number]
 }
 
 export interface User {
@@ -44,6 +46,8 @@ const DEFAULT_OPTIONS: IOptions = {
     Default: {
       background: "vision.webp",
       character: "amiya_guard.png",
+      zoom: 100,
+      offset: [0, 0]
     }
   }
 }

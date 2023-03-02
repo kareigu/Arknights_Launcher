@@ -8,6 +8,8 @@
   import backgrounds from "../backgrounds.json";
 
   let hidden = false;
+  let dragging = false;
+  let previous_mouse_pos: [number, number] = [0, 0];
 
   async function executablePathBrowse(defaultPath: string) {
     const path = await open({
@@ -130,6 +132,60 @@
           <img class="save-button-icon" src="/icons/icons8-save-50.png" />
           <div class="button-dots" />
         </button>
+      </div>
+    </div>
+  {:else}
+    <div class="character-position-options">
+      <div
+        class="drag-surface"
+        on:mousedown={() => (dragging = true)}
+        on:mouseup={() => (dragging = false)}
+        on:mousemove={(e) => {
+          if (!dragging) {
+            previous_mouse_pos = [e.clientX, e.clientY];
+            return;
+          }
+          const mouse_pos_difference = [
+            e.clientX - previous_mouse_pos[0],
+            e.clientY - previous_mouse_pos[1],
+          ];
+          Options.update((o) => {
+            const offset = o.background.Default.offset;
+            const multiplier = 1;
+            o.background.Default.offset = [
+              (offset[0] - mouse_pos_difference[0]) * multiplier,
+              (offset[1] - mouse_pos_difference[1]) * multiplier,
+            ];
+            return o;
+          });
+          previous_mouse_pos = [e.clientX, e.clientY];
+        }}
+      />
+      <div class="zoom-level-container">
+        <span class="zoom-level-label">Zoom level</span>
+        <input
+          class="zoom-level-slider"
+          type="range"
+          min={50}
+          max={300}
+          value={$Options.background.Default.zoom}
+          on:input={(e) => {
+            const new_zoom = e.currentTarget.valueAsNumber;
+            Options.update((o) => {
+              o.background.Default.zoom = new_zoom;
+              return o;
+            });
+          }}
+        />
+        <button
+          class="reset-character-position-button"
+          on:click={() =>
+            Options.update((o) => {
+              o.background.Default.zoom = 100;
+              o.background.Default.offset = [0, 0];
+              return o;
+            })}>Reset position</button
+        >
       </div>
     </div>
   {/if}
@@ -415,6 +471,37 @@
     color: white;
     filter: invert(1);
     z-index: 1;
+  }
+
+  .character-position-options {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    animation: blur-in 80ms ease-in;
+  }
+
+  .drag-surface {
+    width: 100%;
+    height: 100%;
+  }
+
+  .zoom-level-container {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    top: 45%;
+    right: 0rem;
+    transform: translate(0, -50%);
+  }
+
+  .zoom-level-slider {
+    -webkit-appearance: slider-vertical;
   }
 
   @keyframes blur-in {

@@ -25,6 +25,18 @@
       "--background-character",
       `url(${BACKGROUND_BASE_URL}/${o.background.Default.character})`
     );
+    document.documentElement.style.setProperty(
+      "--background-character-zoom",
+      `${o.background.Default.zoom}%`
+    );
+    document.documentElement.style.setProperty(
+      "--background-character-offset-x",
+      `${o.background.Default.offset[0]}%`
+    );
+    document.documentElement.style.setProperty(
+      "--background-character-offset-y",
+      `${o.background.Default.offset[1]}%`
+    );
   });
 
   onMount(async () => {
@@ -73,7 +85,9 @@
   .character-bg {
     background: var(--background-character);
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: var(--background-character-zoom);
+    background-position: var(--background-character-offset-x)
+      var(--background-character-offset-y);
     display: flex;
     flex-direction: column;
     align-items: center;
