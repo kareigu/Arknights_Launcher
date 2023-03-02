@@ -163,10 +163,16 @@
         }}
       />
       <div class="zoom-level-container">
-        <span class="zoom-level-label">Size</span>
-        <span class="zoom-level-label">{$Options.background.Default.zoom}</span>
+        <span class="info-text">Position</span>
+        <span class="info-text"
+          >({$Options.background.Default.offset[0]}, {$Options.background
+            .Default.offset[1]})</span
+        >
         <br />
-        <span class="zoom-level-limits">300</span>
+        <span class="info-text">Size</span>
+        <span class="info-text">{$Options.background.Default.zoom}</span>
+        <br />
+        <span class="info-text">300</span>
         <input
           class="zoom-level-slider"
           type="range"
@@ -181,7 +187,7 @@
             });
           }}
         />
-        <span class="zoom-level-limits">50</span>
+        <span class="info-text">50</span>
         <div class="background-confirm-buttons">
           <span
             class="background-confirm-button"
@@ -543,6 +549,10 @@
 
   .zoom-level-slider::-webkit-slider-thumb:hover {
     filter: brightness(0.5);
+  }
+
+  .info-text {
+    user-select: none;
   }
 
   .background-confirm-buttons {
