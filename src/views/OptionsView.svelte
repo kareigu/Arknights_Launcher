@@ -162,7 +162,10 @@
         }}
       />
       <div class="zoom-level-container">
-        <span class="zoom-level-label">Zoom level</span>
+        <span class="zoom-level-label">Size</span>
+        <span class="zoom-level-label">{$Options.background.Default.zoom}</span>
+        <br />
+        <span class="zoom-level-limits">300</span>
         <input
           class="zoom-level-slider"
           type="range"
@@ -177,15 +180,25 @@
             });
           }}
         />
-        <button
-          class="reset-character-position-button"
-          on:click={() =>
-            Options.update((o) => {
-              o.background.Default.zoom = 100;
-              o.background.Default.offset = [0, 0];
-              return o;
-            })}>Reset position</button
-        >
+        <span class="zoom-level-limits">50</span>
+        <div class="background-confirm-buttons">
+          <span
+            class="background-confirm-button"
+            on:click={() =>
+              Options.update((o) => {
+                o.background.Default.zoom = 100;
+                o.background.Default.offset = [0, 0];
+                return o;
+              })}
+          >
+            <span class="circle-icon" />
+            <span>Restore to Default</span>
+          </span>
+          <span class="background-confirm-button" on:click={save}>
+            <span class="circle-icon" />
+            <span>Confirm Changes</span>
+          </span>
+        </div>
       </div>
     </div>
   {/if}
@@ -495,13 +508,73 @@
     justify-content: center;
     align-items: center;
 
-    top: 45%;
+    box-shadow: -1rem 0rem 1rem rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.6);
+
+    height: 100%;
+    top: 50%;
     right: 0rem;
     transform: translate(0, -50%);
   }
 
   .zoom-level-slider {
-    -webkit-appearance: slider-vertical;
+    appearance: none;
+    -webkit-appearance: none;
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+    transform: rotateZ(-90deg);
+
+    height: 0.15rem;
+    background: linear-gradient(-90deg, var(--ak-white), rgba(0, 0, 0, 0.15));
+  }
+
+  .zoom-level-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 1rem;
+    height: 2rem;
+    background: var(--ak-white);
+    cursor: pointer;
+    border-radius: 0.1rem;
+    position: relative;
+    transition: all 80ms ease-in;
+  }
+
+  .zoom-level-slider::-webkit-slider-thumb:hover {
+    filter: brightness(0.5);
+  }
+
+  .background-confirm-buttons {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+  }
+
+  .background-confirm-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    transition: all 80ms ease-in;
+  }
+
+  .background-confirm-button:hover {
+    filter: brightness(0.5);
+  }
+
+  .background-confirm-button:active {
+    filter: brightness(1.2);
+  }
+
+  .circle-icon {
+    background: var(--ak-white);
+    width: 2rem;
+    height: 2rem;
+    border-radius: 100%;
   }
 
   @keyframes blur-in {
