@@ -198,11 +198,15 @@
                 return o;
               })}
           >
-            <span class="circle-icon" />
+            <span class="circle-icon">
+              <img src="/icons/icons8-undo-48.png" width="25" />
+            </span>
             <span>Restore to Default</span>
           </span>
-          <span class="background-confirm-button" on:click={save}>
-            <span class="circle-icon" />
+          <span class="background-confirm-button confirm-icon" on:click={save}>
+            <span class="circle-icon">
+              <img src="/icons/icons8-done-50.png" width="25" />
+            </span>
             <span>Confirm Changes</span>
           </span>
         </div>
@@ -567,9 +571,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0.5rem;
+    padding: 0rem 0.8rem;
+    margin: 0.5rem 0rem;
     gap: 0.5rem;
     font-size: 0.7rem;
+    cursor: pointer;
     transition: all 80ms ease-in;
   }
 
@@ -586,6 +592,34 @@
     width: 2rem;
     height: 2rem;
     border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .confirm-icon {
+    position: relative;
+  }
+
+  .confirm-icon::before {
+    content: "";
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      var(--button-blue) 10%,
+      var(--button-blue) 20%,
+      transparent 60%
+    );
+    --mask: linear-gradient(transparent 10%, black 11%, black 89%, transparent);
+    mask-image: var(--mask);
+    -webkit-mask-image: var(--mask);
   }
 
   @keyframes blur-in {
