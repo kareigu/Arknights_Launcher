@@ -7,7 +7,7 @@
   import type { IOptions } from "../common";
   import backgrounds from "../backgrounds.json";
 
-  let hidden = false;
+  let positioning = false;
   let dragging = false;
   let previous_mouse_pos: [number, number] = [0, 0];
 
@@ -32,9 +32,13 @@
   }
 
   async function close() {
+    await restore_options();
+    CurrentView.set(View.Main);
+  }
+
+  async function restore_options() {
     const options = await invoke("options", {});
     Options.set(options);
-    CurrentView.set(View.Main);
   }
 
   onMount(async () => {
@@ -53,15 +57,24 @@
       <img src="/icons/icons8-engineering-50.png" class="options-icon" />
       <span>Options</span>
     </div>
-    <button class="toggle-hide-button">
+    <button
+      class={`toggle-positioning-button ${positioning ? "restore" : "adjust"}`}
+      on:click={async () => {
+        if (positioning) await restore_options();
+
+        positioning = !positioning;
+      }}
+    >
       <img
-        src={hidden ? "/icons/icons8-eye-58.png" : "/icons/icons8-eye-64.png"}
-        width="30"
-        on:click={() => (hidden = !hidden)}
+        src={positioning
+          ? "/icons/icons8-close-50.png"
+          : "/icons/icons8-drag-50.png"}
+        width="20"
       />
+      <span>{positioning ? "Revert Changes" : "Adjust Position"}</span>
     </button>
   </div>
-  {#if !hidden}
+  {#if !positioning}
     <div class="options">
       <h2>Executable File Path</h2>
       <div class="executable-path-select">
@@ -291,8 +304,16 @@
     border-color: var(--ak-black);
   }
 
-  .toggle-hide-button {
-    width: 3rem;
+  .toggle-positioning-button.adjust {
+    --bg: var(--ak-white);
+  }
+
+  .toggle-positioning-button.restore {
+    --bg: rgb(209, 68, 68);
+  }
+
+  .toggle-positioning-button {
+    width: 8.3rem;
     height: 1.5rem;
     margin-left: auto;
     margin-right: 1rem;
@@ -304,25 +325,26 @@
 
     border: 0;
     border-radius: 0.1rem;
-    background-color: var(--ak-white);
+    background-color: var(--bg);
     color: var(--ak-black);
-    font-size: 1.5rem;
-    text-align: left;
+    font-size: 0.8rem;
+    text-align: center;
     line-height: 1rem;
     box-shadow: 0.2rem 0.3rem 0.4rem rgba(255, 255, 255, 0.3);
     transition: all 80ms ease-in;
   }
 
-  .toggle-hide-button:hover {
-    background-color: var(--button-grey);
-    color: var(--ak-black);
+  .toggle-positioning-button > img {
+    margin-left: 0.05rem;
+    margin-right: auto;
   }
 
-  .toggle-hide-button:active {
-    background-color: var(--ak-black);
-    color: var(--ak-grey);
-    box-shadow: inset 0.01rem 0.05rem 0.4rem rgba(0, 0, 0, 1);
-    border-color: var(--ak-black);
+  .toggle-positioning-button:hover {
+    filter: brightness(0.8);
+  }
+
+  .toggle-positioning-button:active {
+    filter: brightness(0.5);
   }
 
   .options {
